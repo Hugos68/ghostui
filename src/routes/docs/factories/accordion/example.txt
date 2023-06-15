@@ -1,0 +1,12 @@
+<script>
+	import { createAccordion } from "ghostui/accordion";
+
+    const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ allowMultiOpen: false });
+</script>
+
+<button use:accordionTrigger={{ panelLabel: 'accordion' }}>Trigger</button>
+{#if $isExpanded('accordion')}
+    <div use:accordionPanel={{ label: 'accordion' }}>
+        <!-- Panel Content -->
+    </div>
+{/if}

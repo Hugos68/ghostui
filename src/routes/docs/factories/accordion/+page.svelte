@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import { createAccordion } from '../../../../lib/factories/accordion/accordion.js';
 	import Preview from '../../../../lib/components/Preview.svelte';
+	import Codeblock from '../../../../lib/components/Codeblock.svelte';
 
 	const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({
 		allowMultiOpen: false
@@ -37,6 +38,8 @@
             `
 		}
 	];
+
+    import code from './example.txt?raw';
 </script>
 
 <section class="my-10">
@@ -67,4 +70,7 @@
 
 
 <h2 class="h2">Usage</h2>
+
+<p class="text-lg">To implement the Accordion component in your UI you will need to use the <code>createAccordion</code> method to create the neccescary functionality:</p>
+<Codeblock language="html" {code} />
 
