@@ -23,6 +23,10 @@
                 {
                     label: 'Accordion',
                     href: '/docs/factories/accordion'
+                },
+                {
+                    label: 'Dialog',
+                    href: '/docs/factories/dialog'
                 }
             ]
         },
