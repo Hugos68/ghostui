@@ -1,5 +1,5 @@
 <script>
-	import { createDialog } from "ghostui/accordion";
+	import { createDialog } from "ghostui/dialog";
 
     const { dialogWindow, openDialog, closeDialog, isExpanded } = createDialog();
 </script>
