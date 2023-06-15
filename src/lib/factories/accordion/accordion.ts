@@ -34,6 +34,7 @@ export function createAccordion(accordionParamters: AccordionParameters): Accord
 		{ panelLabel }: AccordionTriggerActionParameters
 	): SvelteActionReturnType {
 		element.setAttribute('aria-controls', panelLabel);
+		element.id = panelLabel;
 
 		const unsubscribe = subscribe((state: AccordionState) => {
 			element.setAttribute('aria-expanded', String(state.expandedPanels.has(panelLabel)));
