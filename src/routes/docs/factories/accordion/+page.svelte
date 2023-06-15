@@ -37,29 +37,17 @@
             `
 		}
 	];
-
-    const code =
-`<script>
-    const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ allowMultiOpen: false });
-<\/script>
-
-<button use:accordionTrigger={{ panelLabel: 'accordion' }}>Trigger</button>
-{#if $isExpanded('accordion')}
-    <div use:accordionPanel={{ label: 'accordion' }}>
-        <!-- Panel Content -->
-    </div>
-{/if}`;
 </script>
 
 <section class="my-10">
     <h1 class="h1">Accordion</h1>
 
-    <Preview {code} language="html">
+    <Preview>
         <ul class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2">
             {#each accordions as { label, content }}
                 <li>
                     <button
-                        class="w-full text-start bg-white text-black p-3"
+                        class="w-full text-start bg-white hover:bg-opacity-95 text-black p-3"
                         use:accordionTrigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
                     >
                     {#if $isExpanded(label)}
@@ -79,5 +67,4 @@
 
 
 <h2 class="h2">Usage</h2>
-
 
