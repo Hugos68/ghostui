@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { createAccordion } from '../../lib/factories/accordion/accordion.js';
+    import { createAccordion } from '../factories/accordion/accordion.js';
 
     const { accordionTrigger, accordionPanel, isExpanded} = createAccordion({ allowMultiOpen: true });
 

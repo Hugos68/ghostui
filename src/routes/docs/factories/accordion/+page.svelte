@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { createAccordion } from '../../../../lib/factories/accordion/accordion.js';
+	import Preview from '../../../../lib/components/Preview.svelte';
 
 	const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({
 		allowMultiOpen: false
@@ -32,28 +33,51 @@
                     <p class="my-4 text-center">Don't have an acount yet? <span class="underline text-blue-600">Click here to sign up.</span></p>
                     <button class="btn bg-blue-400">Submit</button>
                 </form>
+                <p class="italic">Note: We don't actually recommend putting forms inside accordions, this is merely a showcase of what the accordion is capable of</p>
             `
 		}
 	];
+
+    const code =
+`<script>
+    const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ allowMultiOpen: false });
+<\/script>
+
+<button use:accordionTrigger={{ panelLabel: 'accordion' }}>Trigger</button>
+{#if $isExpanded('accordion')}
+    <div use:accordionPanel={{ label: 'accordion' }}>
+        <!-- Panel Content -->
+    </div>
+{/if}`;
 </script>
 
-<h1 class="h1">Accordion</h1>
-<ul class="flex flex-col">
-	{#each accordions as { label, content }}
-		<li class="w-full">
-			<button
-				class="w-full text-start bg-white text-black p-3"
-				use:accordionTrigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
-			>
-			{#if $isExpanded(label)}
-				<div
-					class="bg-white bg-opacity-80 text-black p-3"
-					use:accordionPanel={{ label }}
-					transition:slide
-				>
-					<p>{@html content}</p>
-				</div>
-			{/if}
-		</li>
-	{/each}
-</ul>
+<section class="my-10">
+    <h1 class="h1">Accordion</h1>
+
+    <Preview {code} language="html">
+        <ul class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2">
+            {#each accordions as { label, content }}
+                <li>
+                    <button
+                        class="w-full text-start bg-white text-black p-3"
+                        use:accordionTrigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
+                    >
+                    {#if $isExpanded(label)}
+                        <div
+                            class="bg-white bg-opacity-80 text-black p-3"
+                            use:accordionPanel={{ label }}
+                            transition:slide|local
+                        >
+                            <p>{@html content}</p>
+                        </div>
+                    {/if}
+                </li>
+            {/each}
+        </ul>
+    </Preview>
+</section>
+
+
+<h2 class="h2">Usage</h2>
+
+
