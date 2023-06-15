@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --header-height: 4rem;
+
+    --rounded-base: 4px;
+    --surface-50: rgba(24, 24, 24, 1);
+    --surface-100: rgba(34, 34, 34, 1);
+    --surface-200: rgba(44, 44, 44, 30);
+}
+
+body {
+    @apply bg-[var(--surface-50)] text-black dark:text-white;
+}
+
+.btn {
+    @apply rounded-[var(--rounded-base)] py-1 px-3 transition-[transform,opacity,background] hover:bg-opacity-80 active:scale-[0.97];
+}
+
+.primary {
+    @apply bg-green-300 text-black;
+}
+
+.secondary {
+    @apply bg-pink-400 text-black;
+}
+
+.h1 {
+    @apply text-5xl;
+}
+
+.h2 {
+    @apply text-4xl;
+}
+
+.h3 {
+    @apply text-2xl;
+}
