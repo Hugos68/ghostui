@@ -25,5 +25,5 @@ export type AccordionState = {
 };
 
 export type AccordionParameters = {
-	allowMultiOpen?: boolean;
+	singlularExpanded?: boolean;
 };

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createAccordion } from '../factories/accordion/accordion.js';
 
-    const { accordionTrigger, accordionPanel, isExpanded} = createAccordion({ allowMultiOpen: true });
+    const { accordionTrigger, accordionPanel, isExpanded} = createAccordion({ singlularExpanded: true });
 
     const sidebarItems = [
         {

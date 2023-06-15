@@ -4,9 +4,7 @@
 	import Preview from '../../../../lib/components/Preview.svelte';
 	import Codeblock from '../../../../lib/components/Codeblock.svelte';
 
-	const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({
-		allowMultiOpen: false
-	});
+	const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ singlularExpanded: true });
 
 	const accordions = [
 		{

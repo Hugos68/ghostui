@@ -1,7 +1,7 @@
 <script>
 	import { createAccordion } from "ghostui/accordion";
 
-    const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ allowMultiOpen: false });
+    const { accordionTrigger, accordionPanel, isExpanded } = createAccordion({ singlularExpanded: true });
 </script>
 
 <button use:accordionTrigger={{ panelLabel: 'accordion' }}>Trigger</button>

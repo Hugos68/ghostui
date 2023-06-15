@@ -7,7 +7,7 @@ import type {
 	AccordionTriggerActionParameters
 } from './types.js';
 
-export function createAccordion(accordionParamters: AccordionParameters): Accordion {
+export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
 	const { subscribe, update, set }: Writable<AccordionState> = writable<AccordionState>({ expandedPanels: new Set<string>() });
 
 	function togglePanel(label: string) {
@@ -15,7 +15,7 @@ export function createAccordion(accordionParamters: AccordionParameters): Accord
 			if (state.expandedPanels.has(label)) {
 				state.expandedPanels.delete(label);
 			} else {
-				if (!accordionParamters.allowMultiOpen) state.expandedPanels.clear();
+				if (accordionParamters?.singlularExpanded) state.expandedPanels.clear();
 				state.expandedPanels.add(label);
 			}
 			return state;
@@ -35,7 +35,7 @@ export function createAccordion(accordionParamters: AccordionParameters): Accord
 	): SvelteActionReturnType {
 		element.setAttribute('aria-controls', panelLabel);
 		element.id = panelLabel;
-
+		
 		const unsubscribe = subscribe((state: AccordionState) => {
 			element.setAttribute('aria-expanded', String(state.expandedPanels.has(panelLabel)));
 		});
@@ -43,8 +43,13 @@ export function createAccordion(accordionParamters: AccordionParameters): Accord
 		function clickHandler() {
 			togglePanel(panelLabel);
 		}
-
 		element.addEventListener('click', clickHandler);
+
+		function keydownHandler(event: KeyboardEvent) {
+			if (event.key !== 'Up' && event.key !== 'Down') return;
+			event.preventDefault();
+		}
+		element.addEventListener('keydown', keydownHandler);
 
 		return {
 			destroy() {
