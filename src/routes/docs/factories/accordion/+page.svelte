@@ -70,6 +70,6 @@
 
 <h2 class="h2">Usage</h2>
 
-<p class="text-lg">To implement the Accordion component in your UI you will need to use the <code>createAccordion</code> method to create the neccescary functionality:</p>
+<p class="text-lg">Use <code>createAccordion</code> factory method to create the neccescary functionality:</p>
 <Codeblock language="html" {code} />
 

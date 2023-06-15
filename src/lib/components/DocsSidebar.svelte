@@ -27,6 +27,10 @@
                 {
                     label: 'Dialog',
                     href: '/docs/factories/dialog'
+                },
+                {
+                    label: 'Popover',
+                    href: '/docs/factories/popover'
                 }
             ]
         },
