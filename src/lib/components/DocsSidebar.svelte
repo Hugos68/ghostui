@@ -1,9 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
-    import { createAccordion } from '../factories/accordion/accordion.js';
-
-    const accordion = createAccordion();
-
     const sidebarItems = [
         {
             label: 'Overview',
@@ -37,20 +32,16 @@
         },
     ]
 </script>
-<ul class="flex flex-col gap-4 p-8 bg-[var(--surface-200)] h-full">
+
+<ul class="flex flex-col gap-4 p-8 h-full">
     {#each sidebarItems as {label, navItems}}
         <li>
-            <button class="flex justify-between items-center w-full" use:accordion.trigger={{ panelLabel: label}}>
-                <h3 class="h3">{label}</h3>
-                <i class:rotate-180={$accordion(label).expanded} class="fa-solid fa-caret-up transition-transform"></i>
-            </button>
-            {#if $accordion(label).expanded}
-                <nav class="flex flex-col gap-2 p-2" use:accordion.panel={{ label }} transition:slide>
-                    {#each navItems as {label, href}}
-                        <a href={href}>{label}</a>
-                    {/each}
-                </nav>
-            {/if}
+            <h3 class="h3">{label}</h3>
+            <nav class="flex flex-col gap-2 p-2">
+                {#each navItems as {label, href}}
+                    <a href={href}>{label}</a>
+                {/each}
+            </nav>
         </li>
     {/each}
 </ul>

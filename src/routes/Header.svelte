@@ -1,4 +1,4 @@
-<header class="z-[100] sticky top-0 h-[var(--header-height)] flex items-center px-4 bg-[var(--surface-100)]">
+<header class="z-[100] sticky top-0 h-[var(--header-height)] flex items-center px-4">
 	<nav class="w-full flex gap-4 [&>*:nth-child(2)]:ml-auto">
 		<a class="font-bold" href="/">
 			<svg
