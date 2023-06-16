@@ -1,23 +1,9 @@
-import type { Expandable } from '$lib/internal/types.js';
+import type { Expandable, Labelable } from '$lib/internal/types.js';
 import type { Readable } from 'svelte/store';
 
-export type AccordionPanelActionParameters = {
-	label: string;
-};
-
-export type AccordionTriggerActionParameters = {
-	panelLabel: string;
-};
-
 export interface Accordion extends Readable<(label: string) => Expandable> {
-	panel(
-		element: HTMLElement,
-		accordionpanelActionParameters: AccordionPanelActionParameters
-	): SvelteActionReturnType;
-	trigger(
-		element: HTMLElement,
-		accordionTriggerActionParameters: AccordionTriggerActionParameters
-	): SvelteActionReturnType;
+	panel(element: HTMLElement, { label }: Labelable): SvelteActionReturnType;
+	trigger(element: HTMLElement, { label }: Labelable): SvelteActionReturnType;
 }
 
 export type AccordionState = {

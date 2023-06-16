@@ -1,12 +1,10 @@
 import { derived, writable, type Readable, type Writable } from 'svelte/store';
 import type {
 	Accordion,
-	AccordionPanelActionParameters,
 	AccordionParameters,
 	AccordionState,
-	AccordionTriggerActionParameters
 } from './types.js';
-import type { Expandable } from '$lib/internal/types.js';
+import type { Expandable, Labelable } from '$lib/internal/types.js';
 import { applyBehavior, onClick, onStoreChange, setAttribute } from '$lib/internal/behavior.js';
 
 export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
@@ -36,7 +34,7 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 
 	function panel(
 		element: HTMLElement,
-		{ label }: AccordionPanelActionParameters
+		{ label }: Labelable
 	): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(setAttribute(element, 'aria-label', label));
 		return {
@@ -48,7 +46,7 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 
 	function trigger(
 		element: HTMLElement,
-		{ panelLabel }: AccordionTriggerActionParameters
+		{ label: panelLabel }: Labelable
 	): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-controls', panelLabel),
