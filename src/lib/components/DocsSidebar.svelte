@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
     import { createAccordion } from '../factories/accordion/accordion.js';
 
-    const { accordionTrigger, accordionPanel, isExpanded} = createAccordion({ singlularExpanded: true });
+    const { accordionTrigger, accordionPanel, isExpanded} = createAccordion();
 
     const sidebarItems = [
         {
@@ -44,7 +45,7 @@
                 <i class:rotate-180={$isExpanded(label)} class="fa-solid fa-caret-up transition-transform"></i>
             </button>
             {#if $isExpanded(label)}
-                <nav class="flex flex-col gap-2 p-2" use:accordionPanel={{ label }}>
+                <nav class="flex flex-col gap-2 p-2" use:accordionPanel={{ label }} transition:slide>
                     {#each navItems as {label, href}}
                         <a href={href}>{label}</a>
                     {/each}

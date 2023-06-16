@@ -45,7 +45,7 @@
     <h1 class="h1">Accordion</h1>
 
     <Preview>
-        <ul class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2">
+        <ul class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2 w-full">
             {#each accordions as { label, content }}
                 <li>
                     <button

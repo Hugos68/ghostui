@@ -15,7 +15,7 @@
     <Preview>
         <button class="btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={openDialog}>Open Dialog</button>
         {#if $isExpanded()}
-            <div class="fixed left-[50%] top-[33%] -translate-x-[50%] rounded-[var(--rounded-base)] bg-[var(--surface-100)] p-4 shadow-2xl" use:dialogWindow transition:fly={{ y: 25, duration: 250 }}>
+            <div class="fixed left-[50%] top-[33%] -translate-x-[50%] rounded-[var(--rounded-base)] bg-[var(--surface-100)] p-4 shadow-2xl" use:dialogWindow transition:fly={{ y: 25, duration: 200 }}>
                 <h3 class="h3">Dialog</h3>
                 <p class="text-lg py-4">This is a fully accessible Dialog</p>
                 <div class="flex justify-end gap-2">
