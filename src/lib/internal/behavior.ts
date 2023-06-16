@@ -1,5 +1,5 @@
 import type { Writable } from 'svelte/store';
-import type { Destroyable, Expandable } from './types.js';
+import type { Destroyable } from './types.js';
 
 export function applyBehavior(...destroyables: Destroyable[]): () => void {
 	function removeBehavior() {
@@ -8,6 +8,11 @@ export function applyBehavior(...destroyables: Destroyable[]): () => void {
 		});
 	}
 	return removeBehavior;
+}
+
+export function portal(element: HTMLElement, { target }: { target: HTMLElement }): Destroyable {
+	element.remove();
+	target.append(element);
 }
 
 export function setAttribute(element: HTMLElement, attribute: string, value: string): Destroyable {
@@ -40,20 +45,39 @@ export function onClickOutside(element: HTMLElement, callback: () => void) {
 	};
 }
 
-export function onUpdate<T>(store: Writable<T>, callback: (state: T) => void): Destroyable {
-	const unsubscribe = store.subscribe(state => callback(state));
+export function onStoreChange<T>(store: Writable<T>, callback: (state: T) => void): Destroyable {
+	const unsubscribe = store.subscribe((state) => callback(state));
 	return {
 		destroy() {
 			unsubscribe();
 		}
-	}
+	};
 }
 
-export function onClick(element: HTMLElement, callback: () => void): Destroyable {
-	element.addEventListener('click', callback);
+export function onClick(
+	element: HTMLElement | Document,
+	callback: (event: MouseEvent) => void
+): Destroyable {
+	if (element instanceof HTMLElement) element.addEventListener('click', callback);
+	else if (element instanceof Document) document.addEventListener('click', callback);
 	return {
 		destroy() {
-			element.removeEventListener('click', callback);
+			if (element instanceof HTMLElement) element.removeEventListener('click', callback);
+			else if (element instanceof Document) document.removeEventListener('click', callback);
 		}
-	}
+	};
+}
+
+export function onKeydown(
+	element: HTMLElement | Document,
+	callback: (event: KeyboardEvent) => void
+): Destroyable {
+	if (element instanceof HTMLElement) element.addEventListener('keydown', callback);
+	else if (element instanceof Document) document.addEventListener('keydown', callback);
+	return {
+		destroy() {
+			if (element instanceof HTMLElement) element.removeEventListener('keydown', callback);
+			else if (element instanceof Document) document.removeEventListener('keydown', callback);
+		}
+	};
 }

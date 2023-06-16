@@ -9,7 +9,7 @@ export type AccordionTriggerActionParameters = {
 	panelLabel: string;
 };
 
-export interface Accordion extends Readable<(label: string ) => Expandable> {
+export interface Accordion extends Readable<(label: string) => Expandable> {
 	panel(
 		element: HTMLElement,
 		accordionpanelActionParameters: AccordionPanelActionParameters

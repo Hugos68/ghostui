@@ -1,8 +1,8 @@
 export type Destroyable = void | { destroy(): void };
 
 export type Expandable = {
-    expanded: boolean;
-}
+	expanded: boolean;
+};
 export type Labelable = {
-    label: string;
-}
+	label: string;
+};

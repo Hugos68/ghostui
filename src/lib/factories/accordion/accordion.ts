@@ -7,7 +7,7 @@ import type {
 	AccordionTriggerActionParameters
 } from './types.js';
 import type { Expandable } from '$lib/internal/types.js';
-import { applyBehavior, onClick, onUpdate, setAttribute } from '$lib/internal/behavior.js';
+import { applyBehavior, onClick, onStoreChange, setAttribute } from '$lib/internal/behavior.js';
 
 export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
 	const store: Writable<AccordionState> = writable<AccordionState>({
@@ -26,7 +26,7 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 		store.update((state: AccordionState) => {
 			if (!state.expandedPanels.has(label)) {
 				if (accordionParamters?.singlularExpanded) state.expandedPanels.clear();
-				state.expandedPanels.add(label);				
+				state.expandedPanels.add(label);
 			} else {
 				state.expandedPanels.delete(label);
 			}
@@ -34,10 +34,11 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 		});
 	};
 
-	function panel(element: HTMLElement, { label }: AccordionPanelActionParameters): SvelteActionReturnType {
-		const removeBehavior = applyBehavior(
-			setAttribute(element, 'aria-label', label)
-		)
+	function panel(
+		element: HTMLElement,
+		{ label }: AccordionPanelActionParameters
+	): SvelteActionReturnType {
+		const removeBehavior = applyBehavior(setAttribute(element, 'aria-label', label));
 		return {
 			destroy() {
 				removeBehavior();
@@ -45,14 +46,17 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 		};
 	}
 
-	function trigger(element: HTMLElement,{ panelLabel }: AccordionTriggerActionParameters): SvelteActionReturnType {
+	function trigger(
+		element: HTMLElement,
+		{ panelLabel }: AccordionTriggerActionParameters
+	): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-controls', panelLabel),
-			onUpdate(store, (state: AccordionState) => {
+			onStoreChange(store, (state: AccordionState) => {
 				element.setAttribute('aria-expanded', String(state.expandedPanels.has(panelLabel)));
 			}),
 			onClick(element, () => toggle(panelLabel))
-		)
+		);
 		return {
 			destroy() {
 				removeBehavior();

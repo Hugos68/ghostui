@@ -37,40 +37,41 @@
 		}
 	];
 
-    import code from './example.txt?raw';
+	import code from './example.txt?raw';
 	import type { Accordion } from '$lib/factories/accordion/types.js';
-    
 </script>
 
 <section class="my-10">
-    <h1 class="h1">Accordion</h1>
+	<h1 class="h1">Accordion</h1>
 
-    <Preview>
-        <ul class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2 w-full">
-            {#each accordions as { label, content }}
-                <li>
-                    <button
-                        class="w-full text-start bg-white hover:bg-opacity-95 text-black p-3 mx-auto"
-                        use:accordion.trigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
-                    >
-                    {#if $accordion(label).expanded}
-                        <div
-                            class="bg-white bg-opacity-80 text-black p-3"
-                            use:accordion.panel={{ label }}
-                            transition:slide|local
-                        >
-                            <p>{@html content}</p>
-                        </div>
-                    {/if}
-                </li>
-            {/each}
-        </ul>
-    </Preview>
+	<Preview>
+		<ul
+			class="flex flex-col [&>*:nth-child(1)]:border-b-2 [&>*:nth-child(2)]:border-b-2 [&>*:nth-child(3)]:border-b-2 w-full"
+		>
+			{#each accordions as { label, content }}
+				<li>
+					<button
+						class="w-full text-start bg-white hover:bg-opacity-95 text-black p-3 mx-auto"
+						use:accordion.trigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
+					>
+					{#if $accordion(label).expanded}
+						<div
+							class="bg-white bg-opacity-80 text-black p-3"
+							use:accordion.panel={{ label }}
+							transition:slide|local
+						>
+							<p>{@html content}</p>
+						</div>
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	</Preview>
 </section>
-
 
 <h2 class="h2">Usage</h2>
 
-<p class="text-lg">Use <code>createAccordion</code> factory method to create the neccescary functionality:</p>
+<p class="text-lg">
+	Use <code>createAccordion</code> factory method to create the neccescary functionality:
+</p>
 <Codeblock language="html" {code} />
-
