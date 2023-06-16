@@ -1,8 +1,8 @@
 import { writable, type Readable, type Writable, derived } from "svelte/store";
-import type { Dialog, DialogState } from "./types.js";
+import type { Dialog, DialogParameters, DialogState } from "./types.js";
 import { portal } from "./portal.js";
 
-export function createDialog(): Dialog { 
+export function createDialog({ label }: DialogParameters): Dialog { 
 
     const { subscribe, update, set }: Writable<DialogState> = writable<DialogState>({ expanded: false });
 
@@ -22,8 +22,10 @@ export function createDialog(): Dialog {
     }
 
     function dialogWindow(element: HTMLElement) {
+        element.setAttribute('aria-label', label);
+        element.setAttribute('aria-modal', 'true');
         element.setAttribute('role', 'dialog');
-    
+        
         portal(element, { target: document.body });
 
         const unsubscribe = subscribe((state: DialogState) => {

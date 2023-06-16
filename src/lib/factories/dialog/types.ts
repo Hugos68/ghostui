@@ -12,5 +12,5 @@ export type DialogState = {
 };
 
 export type DialogParameters = {
-	placeholder: unknown
+	label: string
 };

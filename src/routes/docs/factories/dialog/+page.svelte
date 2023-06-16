@@ -6,7 +6,7 @@
     import code from './example.txt?raw';
 	import { fly } from "svelte/transition";
 
-    const { dialogWindow, openDialog, closeDialog, isExpanded }: Dialog = createDialog();
+    const { dialogWindow, openDialog, closeDialog, isExpanded }: Dialog = createDialog({ label: 'modal'});
     
 </script>
 
