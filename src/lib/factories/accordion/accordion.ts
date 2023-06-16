@@ -6,67 +6,63 @@ import type {
 	AccordionState,
 	AccordionTriggerActionParameters
 } from './types.js';
+import type { Expandable } from '$lib/internal/types.js';
+import { applyBehavior, onClick, onUpdate, setAttribute } from '$lib/internal/behavior.js';
 
 export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
-	const { subscribe, update, set }: Writable<AccordionState> = writable<AccordionState>({ expandedPanels: new Set<string>() });
+	const store: Writable<AccordionState> = writable<AccordionState>({
+		expandedPanels: new Set<string>()
+	});
 
-	function togglePanel(label: string) {
-		update((state: AccordionState) => {
-			if (state.expandedPanels.has(label)) {
-				state.expandedPanels.delete(label);
-			} else {
+	const { subscribe }: Readable<(label: string) => Expandable> = derived(store, ($state) => {
+		return (label: string) => {
+			return {
+				expanded: $state.expandedPanels.has(label)
+			};
+		};
+	});
+
+	const toggle = (label: string) => {
+		store.update((state: AccordionState) => {
+			if (!state.expandedPanels.has(label)) {
 				if (accordionParamters?.singlularExpanded) state.expandedPanels.clear();
-				state.expandedPanels.add(label);
+				state.expandedPanels.add(label);				
+			} else {
+				state.expandedPanels.delete(label);
 			}
 			return state;
 		});
-	}
+	};
 
-	function accordionPanel(
-		element: HTMLElement,
-		{ label }: AccordionPanelActionParameters
-	): SvelteActionReturnType {
-		element.setAttribute('aria-labelledby', label);
-	}
-
-	function accordionTrigger(
-		element: HTMLElement,
-		{ panelLabel }: AccordionTriggerActionParameters
-	): SvelteActionReturnType {
-		element.setAttribute('aria-controls', panelLabel);
-		element.id = panelLabel;
-		
-		const unsubscribe = subscribe((state: AccordionState) => {
-			element.setAttribute('aria-expanded', String(state.expandedPanels.has(panelLabel)));
-		});
-
-		function clickHandler() {
-			togglePanel(panelLabel);
-		}
-		element.addEventListener('click', clickHandler);
-
-		function keydownHandler(event: KeyboardEvent) {
-			if (event.key !== 'Up' && event.key !== 'Down') return;
-			event.preventDefault();
-		}
-		element.addEventListener('keydown', keydownHandler);
-
+	function panel(element: HTMLElement, { label }: AccordionPanelActionParameters): SvelteActionReturnType {
+		const removeBehavior = applyBehavior(
+			setAttribute(element, 'aria-label', label)
+		)
 		return {
 			destroy() {
-				unsubscribe();
-				element.removeEventListener('click', clickHandler);
+				removeBehavior();
 			}
 		};
 	}
 
-    const isExpanded: Readable<(label: string) => boolean> = derived({ subscribe }, (state: AccordionState) => (label: string) => state.expandedPanels.has(label))
+	function trigger(element: HTMLElement,{ panelLabel }: AccordionTriggerActionParameters): SvelteActionReturnType {
+		const removeBehavior = applyBehavior(
+			setAttribute(element, 'aria-controls', panelLabel),
+			onUpdate(store, (state: AccordionState) => {
+				element.setAttribute('aria-expanded', String(state.expandedPanels.has(panelLabel)));
+			}),
+			onClick(element, () => toggle(panelLabel))
+		)
+		return {
+			destroy() {
+				removeBehavior();
+			}
+		};
+	}
 
 	return {
-		accordionPanel,
-		accordionTrigger,
-		isExpanded,
-		subscribe,
-		update,
-		set
+		panel,
+		trigger,
+		subscribe
 	};
 }

@@ -1,61 +1,57 @@
-import { writable, type Readable, type Writable, derived } from "svelte/store";
-import type { Dialog, DialogParameters, DialogState } from "./types.js";
-import { portal } from "./portal.js";
+import { writable, type Writable } from 'svelte/store';
+import type { Dialog, DialogParameters, DialogState } from './types.js';
+import { portal } from './portal.js';
+import {
+	applyBehavior,
+	setAttribute,
+    onClickOutside,
+	onUpdate
+} from '$lib/internal/behavior.js';
 
-export function createDialog({ label }: DialogParameters): Dialog { 
+export function createDialog({ label }: DialogParameters): Dialog {
+	const store: Writable<DialogState> = writable<DialogState>({
+		expanded: false
+	});
 
-    const { subscribe, update, set }: Writable<DialogState> = writable<DialogState>({ expanded: false });
+	function open() {
+		store.update((state: DialogState) => {
+			state.expanded = true;
+			return state;
+		});
+	}
 
-    
-    function openDialog() {
-        update((state: DialogState) => {
-            state.expanded = true;
-            return state;
-        });
-    }
+	function close() {
+		store.update((state: DialogState) => {
+			state.expanded = false;
+			return state;
+		});
+	}
 
-    function closeDialog() {
-        update((state: DialogState) => {
-            state.expanded = false;
-            return state;
-        });
-    }
+	function dialog(element: HTMLElement) {
+		
+		const removeBehavior = applyBehavior(
+			setAttribute(element, 'aria-label', label),
+			setAttribute(element, 'aria-modal', 'true'),
+			setAttribute(element, 'role', 'dialog'),
+			portal(element, { target: document.body }),
+			onClickOutside(element, close),
+			onUpdate(store, (state: DialogState) => {
+				if (state.expanded) document.body.children[0].setAttribute('inert', '')
+				else document.body.children[0].removeAttribute('inert')
+			})
+		);
 
-    function dialogWindow(element: HTMLElement) {
-        element.setAttribute('aria-label', label);
-        element.setAttribute('aria-modal', 'true');
-        element.setAttribute('role', 'dialog');
-        
-        portal(element, { target: document.body });
+		return {
+			destroy() {
+				removeBehavior();
+			}
+		};
+	}
 
-        const unsubscribe = subscribe((state: DialogState) => {
-            if (state.expanded) document.body.children[0].setAttribute('inert', '');
-            else document.body.children[0].removeAttribute('inert');
-        });
-
-        function mousedownHandler(event: MouseEvent) {
-            if (!element.contains(event.target as HTMLElement)) closeDialog();
-        }
-        document.addEventListener('mousedown', mousedownHandler);
-  
-        return {
-            destroy() {
-                closeDialog();
-                unsubscribe();
-                document.removeEventListener('mousedown', mousedownHandler);
-            }
-        }
-    }
-
-    const isExpanded: Readable<() => boolean> = derived({ subscribe }, (state: DialogState) => () => state.expanded);
-
-    return {
-        openDialog,
-        closeDialog,
-		isExpanded,
-        dialogWindow,
-		subscribe,
-		update,
-		set
-    }
+	return {
+		open,
+		close,
+		dialog,
+		subscribe: store.subscribe,
+	};
 }

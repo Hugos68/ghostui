@@ -2,7 +2,7 @@
 	import { slide } from 'svelte/transition';
     import { createAccordion } from '../factories/accordion/accordion.js';
 
-    const { accordionTrigger, accordionPanel, isExpanded} = createAccordion();
+    const accordion = createAccordion();
 
     const sidebarItems = [
         {
@@ -40,12 +40,12 @@
 <ul class="flex flex-col gap-4 p-8 bg-[var(--surface-200)] h-full">
     {#each sidebarItems as {label, navItems}}
         <li>
-            <button class="flex justify-between items-center w-full" use:accordionTrigger={{ panelLabel: label}}>
+            <button class="flex justify-between items-center w-full" use:accordion.trigger={{ panelLabel: label}}>
                 <h3 class="h3">{label}</h3>
-                <i class:rotate-180={$isExpanded(label)} class="fa-solid fa-caret-up transition-transform"></i>
+                <i class:rotate-180={$accordion(label).expanded} class="fa-solid fa-caret-up transition-transform"></i>
             </button>
-            {#if $isExpanded(label)}
-                <nav class="flex flex-col gap-2 p-2" use:accordionPanel={{ label }} transition:slide>
+            {#if $accordion(label).expanded}
+                <nav class="flex flex-col gap-2 p-2" use:accordion.panel={{ label }} transition:slide>
                     {#each navItems as {label, href}}
                         <a href={href}>{label}</a>
                     {/each}

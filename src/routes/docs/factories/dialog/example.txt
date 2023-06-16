@@ -1,12 +1,12 @@
 <script>
 	import { createDialog } from "ghostui/dialog";
 
-    const { dialogWindow, openDialog, closeDialog, isExpanded } = createDialog();
+    const dialog = createDialog();
 </script>
 
-<button on:click={openDialog}>Toggle</button>
-{#if $isExpanded()}
+<button on:click={dialog.open}>Toggle</button>
+{#if $dialog.expanded}
     <div use:dialogWindow>
-        <button on:click={closeDialog}>Close</button>
+        <button on:click={dialog.close}>Close</button>
     </div>
 {/if}

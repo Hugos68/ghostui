@@ -1,16 +1,13 @@
-import type { Readable, Writable } from 'svelte/store';
+import type { Expandable, Labelable } from '$lib/internal/types.js';
+import type { Readable } from 'svelte/store';
 
-export interface Dialog extends Writable<DialogState> {
-	dialogWindow(element: HTMLElement): SvelteActionReturnType;
-    openDialog: () => void;
-	closeDialog: () => void;
-	isExpanded: Readable<() => boolean>;
+export interface Dialog extends Readable<DialogState> {
+	dialog(element: HTMLElement): SvelteActionReturnType;
+    open: () => void;
+	close: () => void;
 }
 
-export type DialogState = {
-	expanded: boolean;
-};
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DialogState extends Expandable {};
 
-export type DialogParameters = {
-	label: string
-};
+export type DialogParameters = Labelable;

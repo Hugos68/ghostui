@@ -4,7 +4,7 @@
 	import Preview from '../../../../lib/components/Preview.svelte';
 	import Codeblock from '../../../../lib/components/Codeblock.svelte';
 
-	const { accordionTrigger, accordionPanel, isExpanded }: Accordion = createAccordion({ singlularExpanded: true });
+	const accordion: Accordion = createAccordion({ singlularExpanded: true });
 
 	const accordions = [
 		{
@@ -39,6 +39,7 @@
 
     import code from './example.txt?raw';
 	import type { Accordion } from '$lib/factories/accordion/types.js';
+    
 </script>
 
 <section class="my-10">
@@ -50,12 +51,12 @@
                 <li>
                     <button
                         class="w-full text-start bg-white hover:bg-opacity-95 text-black p-3 mx-auto"
-                        use:accordionTrigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
+                        use:accordion.trigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
                     >
-                    {#if $isExpanded(label)}
+                    {#if $accordion(label).expanded}
                         <div
                             class="bg-white bg-opacity-80 text-black p-3"
-                            use:accordionPanel={{ label }}
+                            use:accordion.panel={{ label }}
                             transition:slide|local
                         >
                             <p>{@html content}</p>

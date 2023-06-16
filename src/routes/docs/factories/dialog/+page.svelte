@@ -6,21 +6,20 @@
     import code from './example.txt?raw';
 	import { fly } from "svelte/transition";
 
-    const { dialogWindow, openDialog, closeDialog, isExpanded }: Dialog = createDialog({ label: 'modal'});
-    
+    const dialog: Dialog = createDialog({ label: 'modal' });
 </script>
 
 <section class="my-10">
     <h1 class="h1">Dialog</h1>
     <Preview>
-        <button class="btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={openDialog}>Open Dialog</button>
-        {#if $isExpanded()}
-            <div class="fixed left-[50%] top-[33%] -translate-x-[50%] rounded-[var(--rounded-base)] bg-[var(--surface-100)] p-4 shadow-2xl" use:dialogWindow transition:fly={{ y: 25, duration: 200 }}>
+        <button class="btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={dialog.open}>Open Dialog</button>
+        {#if $dialog.expanded}
+            <div class="fixed left-[50%] top-[33%] -translate-x-[50%] rounded-[var(--rounded-base)] bg-[var(--surface-100)] p-4 shadow-2xl" use:dialog.dialog transition:fly={{ y: 25, duration: 200 }}>
                 <h3 class="h3">Dialog</h3>
                 <p class="text-lg py-4">This is a fully accessible Dialog</p>
                 <div class="flex justify-end gap-2">
-                    <button class="ml-auto btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={closeDialog}>Cancel</button>
-                    <button class="btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={closeDialog}>Confirm</button>
+                    <button class="ml-auto btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={dialog.close}>Cancel</button>
+                    <button class="btn bg-purple-400 text-black rounded-[var(--rounded-base)]" on:click={dialog.close}>Confirm</button>
                 </div>
             </div>
         {/if}
