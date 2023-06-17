@@ -52,7 +52,7 @@
 				<li>
 					<button
 						class="w-full text-start bg-white hover:bg-opacity-95 text-black p-3 mx-auto"
-						use:accordion.trigger={{ panelLabel: label }}><h3 class="text-lg">{label}</h3></button
+						use:accordion.trigger={{ label }}><h3 class="text-lg">{label}</h3></button
 					>
 					{#if $accordion(label).expanded}
 						<div
