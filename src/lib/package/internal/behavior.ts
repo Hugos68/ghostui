@@ -1,4 +1,4 @@
-import type { Writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 import type { Destroyable } from './types.js';
 
 export function applyBehavior(...destroyables: Destroyable[]): () => void {
@@ -31,8 +31,8 @@ export function onClickOutside(element: HTMLElement, callback: () => void) {
 	};
 }
 
-export function onStoreChange<T>(store: Writable<T>, callback: (state: T) => void): Destroyable {
-	const unsubscribe = store.subscribe((state) => callback(state));
+export function onStoreChange<T>(store: Readable<T>, callback: (state: T) => void): Destroyable {
+	const unsubscribe = store.subscribe((state: T) => callback(state));
 	return {
 		destroy() {
 			unsubscribe();

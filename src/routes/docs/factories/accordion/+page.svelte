@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { createAccordion } from '../../../../lib/factories/accordion/accordion.js';
-	import Preview from '../../../../lib/(docs)/Preview.svelte';
-	import Codeblock from '../../../../lib/(docs)/Codeblock.svelte';
+	import { createAccordion, type Accordion } from '$lib/package/factories/accordion.js';
+	import Preview from '$lib/docs/components/Preview.svelte';
+	import Codeblock from '$lib/docs/components/Codeblock.svelte';
+	import code from './example.txt?raw';
 
 	const accordion: Accordion = createAccordion({ singlularExpanded: true });
 
@@ -36,9 +37,6 @@
             `
 		}
 	];
-
-	import code from './example.txt?raw';
-	import type { Accordion } from '$lib/factories/accordion/types.js';
 </script>
 
 <section class="my-10">

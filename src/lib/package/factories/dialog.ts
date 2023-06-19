@@ -8,12 +8,12 @@ import {
 	onKeydown
 } from '../internal/behavior.js';
 import type { Expandable, Labelable } from '../internal/types.js';
+import { createEventDispatcher } from 'svelte';
 
-export interface Dialog {
+export interface Dialog extends Readable<Partial<DialogState>> {
 	dialog(element: HTMLElement): SvelteActionReturnType;
 	open: () => void;
 	close: () => void;
-	expanded: Readable<Expandable>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -26,8 +26,8 @@ export function createDialog({ label }: DialogParameters): Dialog {
 		expanded: false
 	});
 
-	const expanded = derived(store, $state => {
-		const { expanded } = $state
+	const { subscribe } = derived(store, $state => {
+		const { expanded } = $state;
 		return { expanded }
 	  })
 
@@ -43,9 +43,9 @@ export function createDialog({ label }: DialogParameters): Dialog {
 			state.expanded = false;
 			return state;
 		});
-		
 	}
 
+	let cachedExpanded = false;
 	function dialog(element: HTMLElement) {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-label', label),
@@ -61,6 +61,9 @@ export function createDialog({ label }: DialogParameters): Dialog {
 			onStoreChange(store, (state: DialogState) => {
 				if (state.expanded) document.body.children[0].setAttribute('inert', '');
 				else document.body.children[0].removeAttribute('inert');
+				if (cachedExpanded && !state.expanded) element.dispatchEvent(new CustomEvent('close'));				
+				if (!cachedExpanded && state.expanded) element.dispatchEvent(new CustomEvent('open'));
+				cachedExpanded = state.expanded;
 			})
 		);
 
@@ -75,6 +78,6 @@ export function createDialog({ label }: DialogParameters): Dialog {
 		open,
 		close,
 		dialog,
-		expanded
+		subscribe
 	};
 }
