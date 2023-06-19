@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { createAccordion } from '../../../../lib/factories/accordion/accordion.js';
-	import Preview from '../../../../lib/components/Preview.svelte';
-	import Codeblock from '../../../../lib/components/Codeblock.svelte';
+	import Preview from '../../../../lib/(docs)/Preview.svelte';
+	import Codeblock from '../../../../lib/(docs)/Codeblock.svelte';
 
 	const accordion: Accordion = createAccordion({ singlularExpanded: true });
 

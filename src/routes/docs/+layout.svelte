@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DocsSidebar from '../../lib/components/DocsSidebar.svelte';
+	import DocsSidebar from '../../lib/(docs)/DocsSidebar.svelte';
 </script>
 
 <section class="xl:grid xl:grid-cols-[150px_1fr_250px]">

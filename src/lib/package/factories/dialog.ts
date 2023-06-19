@@ -1,5 +1,4 @@
-import { writable, type Writable } from 'svelte/store';
-import type { Dialog, DialogParameters, DialogState } from './types.js';
+import { writable, type Readable, type Writable, derived } from 'svelte/store';
 import {
 	applyBehavior,
 	setAttribute,
@@ -7,12 +6,30 @@ import {
 	onStoreChange,
 	portal,
 	onKeydown
-} from '$lib/internal/behavior.js';
+} from '../internal/behavior.js';
+import type { Expandable, Labelable } from '../internal/types.js';
+
+export interface Dialog {
+	dialog(element: HTMLElement): SvelteActionReturnType;
+	open: () => void;
+	close: () => void;
+	expanded: Readable<Expandable>;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DialogState extends Expandable {}
+
+export type DialogParameters = Labelable;
 
 export function createDialog({ label }: DialogParameters): Dialog {
 	const store: Writable<DialogState> = writable<DialogState>({
 		expanded: false
 	});
+
+	const expanded = derived(store, $state => {
+		const { expanded } = $state
+		return { expanded }
+	  })
 
 	function open() {
 		store.update((state: DialogState) => {
@@ -26,6 +43,7 @@ export function createDialog({ label }: DialogParameters): Dialog {
 			state.expanded = false;
 			return state;
 		});
+		
 	}
 
 	function dialog(element: HTMLElement) {
@@ -57,6 +75,6 @@ export function createDialog({ label }: DialogParameters): Dialog {
 		open,
 		close,
 		dialog,
-		subscribe: store.subscribe
+		expanded
 	};
 }

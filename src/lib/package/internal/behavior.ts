@@ -19,20 +19,6 @@ export function setAttribute(element: HTMLElement, attribute: string, value: str
 	element.setAttribute(attribute, value);
 }
 
-// export function addListener(
-// 	element: EventTarget,
-// 	type: keyof HTMLElementEventMap,
-// 	callback,
-// 	options
-// ): Destroyable {
-// 	element.addEventListener(type, callback, options);
-// 	return {
-// 		destroy() {
-// 			element.removeEventListener(type, callback, options);
-// 		}
-// 	};
-// }
-
 export function onClickOutside(element: HTMLElement, callback: () => void) {
 	const clickHandler = (event: MouseEvent) => {
 		if (!element.contains(event.target as HTMLElement)) callback();

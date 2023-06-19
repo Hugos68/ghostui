@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Dialog } from '../../../../lib/factories/dialog/types.js';
 	import { createDialog } from '../../../../lib/factories/dialog/dialog.js';
-	import Preview from '$lib/components/Preview.svelte';
-	import Codeblock from '$lib/components/Codeblock.svelte';
+	import Preview from '$lib/(docs)/Preview.svelte';
+	import Codeblock from '$lib/(docs)/Codeblock.svelte';
 	import code from './example.txt?raw';
 	import { fly } from 'svelte/transition';
 

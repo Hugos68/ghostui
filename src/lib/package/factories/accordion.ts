@@ -1,11 +1,19 @@
 import { derived, writable, type Readable, type Writable } from 'svelte/store';
-import type {
-	Accordion,
-	AccordionParameters,
-	AccordionState,
-} from './types.js';
-import type { Expandable, Labelable } from '$lib/internal/types.js';
-import { applyBehavior, onClick, onStoreChange, setAttribute } from '$lib/internal/behavior.js';
+import type { Expandable, Labelable } from '../internal/types.js';
+import { applyBehavior, onClick, onStoreChange, setAttribute } from '../internal/behavior.js';
+
+export interface Accordion extends Readable<(label: string) => Expandable> {
+	panel(element: HTMLElement, { label }: Labelable): SvelteActionReturnType;
+	trigger(element: HTMLElement, { label }: Labelable): SvelteActionReturnType;
+}
+
+export type AccordionState = {
+	expandedPanels: Set<string>;
+};
+
+export type AccordionParameters = {
+	singlularExpanded?: boolean;
+};
 
 export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
 	const store: Writable<AccordionState> = writable<AccordionState>({
@@ -32,10 +40,7 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 		});
 	};
 
-	function panel(
-		element: HTMLElement,
-		{ label }: Labelable
-	): SvelteActionReturnType {
+	function panel(element: HTMLElement, { label }: Labelable): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(setAttribute(element, 'aria-label', label));
 		return {
 			destroy() {
@@ -44,10 +49,7 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 		};
 	}
 
-	function trigger(
-		element: HTMLElement,
-		{ label: panelLabel }: Labelable
-	): SvelteActionReturnType {
+	function trigger(element: HTMLElement, { label: panelLabel }: Labelable): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-controls', panelLabel),
 			onStoreChange(store, (state: AccordionState) => {

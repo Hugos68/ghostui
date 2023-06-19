@@ -1,5 +1,6 @@
 {
-	"name": "ghostui",
+	"name": "@hugos68/ghostui",
+	"license": "MIT",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
