@@ -16,7 +16,7 @@ export type AccordionParameters = {
 };
 
 export function createAccordion(accordionParamters?: AccordionParameters): Accordion {
-	const state = { expandedPanels: new Set<string>() }
+	const state = { expandedPanels: new Set<string>() };
 	let cachedState = structuredClone(state);
 	const store: Writable<AccordionState> = writable<AccordionState>(state);
 
@@ -43,11 +43,11 @@ export function createAccordion(accordionParamters?: AccordionParameters): Accor
 	function panel(element: HTMLElement, { label }: Labelable): SvelteActionReturnType {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-label', label),
-			onStoreChange(store, (state: AccordionState) => {				
+			onStoreChange(store, (state: AccordionState) => {
 				const closed = cachedState.expandedPanels.has(label) && !state.expandedPanels.has(label);
 				const opened = !cachedState.expandedPanels.has(label) && state.expandedPanels.has(label);
-				if (closed) element.dispatchEvent(new CustomEvent('close'));
-				if (opened) element.dispatchEvent(new CustomEvent('open'));		
+				if (closed) element.dispatchEvent(new Event('close'));
+				if (opened) element.dispatchEvent(new Event('open'));
 				cachedState = structuredClone(state);
 			})
 		);

@@ -61,8 +61,8 @@ export function createDialog({ label }: DialogParameters): Dialog {
 				else document.body.children[0].removeAttribute('inert');
 				const closed = cachedState.expanded && !state.expanded;
 				const opened = !cachedState.expanded && state.expanded;
-				if (closed) element.dispatchEvent(new CustomEvent('close'));
-				if (opened) element.dispatchEvent(new CustomEvent('open'));				
+				if (closed) element.dispatchEvent(new Event('close'));
+				if (opened) element.dispatchEvent(new Event('open'));
 				cachedState = structuredClone(state);
 			})
 		);
