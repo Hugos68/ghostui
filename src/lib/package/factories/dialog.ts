@@ -8,7 +8,6 @@ import {
 	onKeydown
 } from '../internal/behavior.js';
 import type { Expandable, Labelable } from '../internal/types.js';
-import { createEventDispatcher } from 'svelte';
 
 export interface Dialog extends Readable<Partial<DialogState>> {
 	dialog(element: HTMLElement): SvelteActionReturnType;
@@ -26,10 +25,10 @@ export function createDialog({ label }: DialogParameters): Dialog {
 		expanded: false
 	});
 
-	const { subscribe } = derived(store, $state => {
+	const { subscribe } = derived(store, ($state) => {
 		const { expanded } = $state;
-		return { expanded }
-	  })
+		return { expanded };
+	});
 
 	function open() {
 		store.update((state: DialogState) => {
@@ -61,7 +60,7 @@ export function createDialog({ label }: DialogParameters): Dialog {
 			onStoreChange(store, (state: DialogState) => {
 				if (state.expanded) document.body.children[0].setAttribute('inert', '');
 				else document.body.children[0].removeAttribute('inert');
-				if (cachedExpanded && !state.expanded) element.dispatchEvent(new CustomEvent('close'));				
+				if (cachedExpanded && !state.expanded) element.dispatchEvent(new CustomEvent('close'));
 				if (!cachedExpanded && state.expanded) element.dispatchEvent(new CustomEvent('open'));
 				cachedExpanded = state.expanded;
 			})
