@@ -21,9 +21,9 @@ export interface DialogState extends Expandable {}
 export type DialogParameters = Labelable;
 
 export function createDialog({ label }: DialogParameters): Dialog {
-	const store: Writable<DialogState> = writable<DialogState>({
-		expanded: false
-	});
+	const state = { expanded: false };
+	let cachedState = structuredClone(state);
+	const store: Writable<DialogState> = writable<DialogState>(state);
 
 	const { subscribe } = derived(store, ($state) => {
 		const { expanded } = $state;
@@ -44,7 +44,6 @@ export function createDialog({ label }: DialogParameters): Dialog {
 		});
 	}
 
-	let cachedExpanded = false;
 	function dialog(element: HTMLElement) {
 		const removeBehavior = applyBehavior(
 			setAttribute(element, 'aria-label', label),
@@ -60,9 +59,11 @@ export function createDialog({ label }: DialogParameters): Dialog {
 			onStoreChange(store, (state: DialogState) => {
 				if (state.expanded) document.body.children[0].setAttribute('inert', '');
 				else document.body.children[0].removeAttribute('inert');
-				if (cachedExpanded && !state.expanded) element.dispatchEvent(new CustomEvent('close'));
-				if (!cachedExpanded && state.expanded) element.dispatchEvent(new CustomEvent('open'));
-				cachedExpanded = state.expanded;
+				const closed = cachedState.expanded && !state.expanded;
+				const opened = !cachedState.expanded && state.expanded;
+				if (closed) element.dispatchEvent(new CustomEvent('close'));
+				if (opened) element.dispatchEvent(new CustomEvent('open'));				
+				cachedState = structuredClone(state);
 			})
 		);
 
